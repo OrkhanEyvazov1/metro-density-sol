@@ -6,6 +6,14 @@ services:
       PORT: 8000
       LOG_LEVEL: info
       CORS_ORIGINS: "*"
+      BACKEND_URL: http://127.0.0.1:8000/api/density
+      NUM_TRAINS: 11
+      WAGONS_PER_TRAIN: 5
+      TRANSITION_STEPS: 30
+      TRANSITION_INTERVAL: 1
+      BOARDING_STEPS: 10
+      IDLE_SECONDS: 5
+      STARTUP_DELAY: 3
     ports:
       - "8000:8000"
     networks:
@@ -15,25 +23,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
-
-  generator:
-    build: ./generator
-    container_name: metro-generator
-    environment:
-      BACKEND_URL: http://backend:8000/api/density
-      NUM_TRAINS: 10
-      WAGONS_PER_TRAIN: 5
-      STATION_INTERVAL: 120
-      TRANSITION_STEPS: 10
-      TRANSITION_INTERVAL: 1
-      TRAIN_STAGGER: 12
-      STARTUP_DELAY: 3
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - metro-net
-    restart: unless-stopped
 
   frontend:
     build: ./frontend
